@@ -1,0 +1,6 @@
+github.com/go-yaml/yaml v2.1.0+incompatible h1:RYi2hDdss1u4YE7GwixGzWwVo47T8UQwnTLB6vQiq+o=
+github.com/go-yaml/yaml v2.1.0+incompatible/go.mod h1:w2MrLa16VYP0jy6N7M5kHaCkaLENm+P+Tv+MfurjSw0=
+github.com/iwind/TeaGo v0.0.0-20190519100820-f9970bdbb2fd h1:8R2gr6VmU/kbpoCwPE6PU4DrGM3kfUnLOCiX0XJFDzY=
+github.com/iwind/TeaGo v0.0.0-20190519100820-f9970bdbb2fd/go.mod h1:taNzU+Tt7Axz5t1v8pEV7xRuioNJxbMeMAbDVQpxq20=
+github.com/pquerna/ffjson v0.0.0-20181028064349-e517b90714f7 h1:gGBSHPOU7g8YjTbhwn+lvFm2VDEhhA+PwDIlstkgSxE=
+github.com/pquerna/ffjson v0.0.0-20181028064349-e517b90714f7/go.mod h1:YARuvh7BUWHNhzDq2OM5tzR2RiCcN2D7sapiKyCel/M=

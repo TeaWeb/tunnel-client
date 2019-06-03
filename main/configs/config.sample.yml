@@ -1,0 +1,4 @@
+tunnels:
+  - remote: "127.0.0.1:9001"
+    local: "http://127.0.0.1"
+    host: "www.teaos.cn"
