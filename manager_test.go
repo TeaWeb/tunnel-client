@@ -16,5 +16,7 @@ func TestManager_Start(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	time.Sleep(2 * time.Second)
+	for {
+		time.Sleep(24 * time.Hour)
+	}
 }

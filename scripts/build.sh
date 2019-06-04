@@ -16,7 +16,6 @@ export GOARCH=amd64
 
 build
 
-
 # linux 32
 export GOOS=linux
 export GOARCH=386

@@ -36,7 +36,7 @@ func (this *Shell) Start() {
 		WriteString(fmt.Sprintf("%d", os.Getpid()))
 
 	// log
-	if !Tea.IsTesting() {
+	if len(os.Args) > 1 && !Tea.IsTesting() {
 		fp, err := os.OpenFile(Tea.Root+"/logs/run.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666)
 		if err == nil {
 			log.SetOutput(fp)
@@ -142,7 +142,7 @@ func (this *Shell) execStart() bool {
 		return true
 	}
 
-	cmd := exec.Command(os.Args[0])
+	cmd := exec.Command(os.Args[0], "background")
 	err := cmd.Start()
 	if err != nil {
 		fmt.Println("TeaWeb Tunnel Client start failed:", err.Error())

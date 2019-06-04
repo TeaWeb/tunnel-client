@@ -17,4 +17,7 @@ var HttpClient = &http.Client{
 		},
 		Proxy: nil,
 	},
+	CheckRedirect: func(req *http.Request, via []*http.Request) error {
+		return http.ErrUseLastResponse
+	},
 }

@@ -9,6 +9,7 @@ import (
 	"net"
 	"net/http"
 	"net/http/httputil"
+	"runtime"
 	"sync"
 	"time"
 )
@@ -41,7 +42,7 @@ func (this *Tunnel) Start() error {
 
 	for {
 		this.connLocker.Lock()
-		if len(this.conns) >= 16 {
+		if len(this.conns) >= runtime.NumCPU()*2 {
 			this.connLocker.Unlock()
 			time.Sleep(1 * time.Second)
 			continue
@@ -50,8 +51,8 @@ func (this *Tunnel) Start() error {
 
 		conn, err := net.Dial("tcp", this.config.Remote)
 		if err != nil {
-			time.Sleep(10 * time.Second)
 			logs.Println("[error]" + err.Error())
+			time.Sleep(10 * time.Second)
 			continue
 		}
 
@@ -84,6 +85,8 @@ func (this *Tunnel) Start() error {
 				req.URL.Host = host
 				req.URL.Scheme = scheme
 
+				logs.Println(req.Header.Get("X-Forwarded-For") + " - \"" + req.Method + " " + req.URL.String() + "\" \"" + req.Header.Get("User-Agent") + "\"")
+
 				if len(this.config.Host) > 0 {
 					req.Host = this.config.Host
 				} else {
@@ -93,9 +96,25 @@ func (this *Tunnel) Start() error {
 				resp, err := HttpClient.Do(req)
 				if err != nil {
 					logs.Error(err)
-					conn.Write([]byte("HTTP/1.1 502 Bad Gateway\r\n"))
-					conn.Write([]byte("Content-Type: text/plain\r\n\r\n"))
+					resp := &http.Response{
+						StatusCode: http.StatusBadGateway,
+						Status:     "Bad Gateway",
+						Header: map[string][]string{
+							"Content-Type": {"text/plain"},
+							"Connection":   {"keep-alive"},
+						},
+						Proto:      "HTTP/1.1",
+						ProtoMajor: 1,
+						ProtoMinor: 1,
+					}
+					data, err := httputil.DumpResponse(resp, false)
+					if err != nil {
+						logs.Error(err)
+						continue
+					}
+					conn.Write(data)
 				} else {
+					resp.Header.Set("Connection", "keep-alive")
 					data, err := httputil.DumpResponse(resp, true)
 					if err != nil {
 						logs.Error(err)

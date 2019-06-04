@@ -41,6 +41,11 @@ function build() {
     echo "[copy files]"
     cp -R ${PROJECT}/main/configs/config.sample.yml ${TARGET}/configs/config.yml
 
+    if [ ${GOOS} = "windows" ]
+    then
+		cp ${PROJECT}/scripts/start.bat ${TARGET}/start.bat
+    fi
+
     echo "[zip files]"
     cd ${TARGET}/../
     if [ -f teaweb-tunnel-${GOOS}-${GOARCH}-v${VERSION}.zip ]
