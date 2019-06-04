@@ -90,7 +90,12 @@ func (this *Tunnel) Start() error {
 				if len(this.config.Host) > 0 {
 					req.Host = this.config.Host
 				} else {
-					req.Host = host
+					forwardedHost := req.Header.Get("X-Forwarded-Host")
+					if len(forwardedHost) > 0 {
+						req.Host = forwardedHost
+					} else {
+						req.Host = host
+					}
 				}
 
 				resp, err := HttpClient.Do(req)
