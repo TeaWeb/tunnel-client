@@ -61,6 +61,10 @@ func (this *Tunnel) Start() error {
 		this.connLocker.Unlock()
 
 		go func(conn net.Conn) {
+			if len(this.config.Secret) > 0 {
+				conn.Write([]byte(this.config.Secret + "\n"))
+			}
+
 			reader := bufio.NewReader(conn)
 			for {
 				req, err := http.ReadRequest(reader)

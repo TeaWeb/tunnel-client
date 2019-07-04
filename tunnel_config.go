@@ -6,6 +6,7 @@ type TunnelConfig struct {
 	Remote string `yaml:"remote"`
 	Local  string `yaml:"local"`
 	Host   string `yaml:"host"`
+	Secret string `yaml:"secret"`
 
 	localHost   string
 	localScheme string

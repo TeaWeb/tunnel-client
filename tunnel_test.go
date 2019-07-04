@@ -4,9 +4,10 @@ import "testing"
 
 func TestTunnel_Start(t *testing.T) {
 	config := &TunnelConfig{
-		Remote: "127.0.0.1:9001",
-		Local:  "http://127.0.0.1",
+		Remote: "192.168.2.40:8884",
+		Local:  "http://127.0.0.1:9991",
 		Host:   "www.teaos.cn",
+		Secret: "",
 	}
 	err := config.Validate()
 	if err != nil {

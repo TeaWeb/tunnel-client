@@ -2,3 +2,4 @@ tunnels:
   - remote: "8.8.8.8:9001"
     local: "http://127.0.0.1"
     host: ""
+    secret: ""
