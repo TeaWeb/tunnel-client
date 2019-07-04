@@ -7,7 +7,7 @@ func TestTunnel_Start(t *testing.T) {
 		Remote: "192.168.2.40:8884",
 		Local:  "http://127.0.0.1:9991",
 		Host:   "www.teaos.cn",
-		Secret: "",
+		Secret: "YKCXgsGlDcZv7o5VEjF2iT5K4t3ae5bE",
 	}
 	err := config.Validate()
 	if err != nil {

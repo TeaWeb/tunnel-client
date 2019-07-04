@@ -2,9 +2,11 @@ package tunnel_client
 
 import (
 	"bufio"
+	"bytes"
 	"errors"
 	"github.com/iwind/TeaGo/logs"
 	"io"
+	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
@@ -83,6 +85,33 @@ func (this *Tunnel) Start() error {
 					this.conns = result
 					this.connLocker.Unlock()
 					break
+				}
+
+				// special urls
+				if len(req.Host) == 0 {
+					if req.URL.Path == "/$$TEA/ping" { // ping
+						body := []byte("OK")
+						resp := &http.Response{
+							StatusCode:    http.StatusOK,
+							Status:        "Ok",
+							Proto:         "HTTP/1.1",
+							ProtoMajor:    1,
+							ProtoMinor:    1,
+							ContentLength: int64(len(body)),
+							Body:          ioutil.NopCloser(bytes.NewBuffer(body)),
+						}
+						data, err := httputil.DumpResponse(resp, true)
+						if err != nil {
+							logs.Error(err)
+						} else {
+							_, err = conn.Write(data)
+							if err != nil {
+								logs.Error(err)
+							}
+						}
+						resp.Body.Close()
+						continue
+					}
 				}
 
 				req.RequestURI = ""
