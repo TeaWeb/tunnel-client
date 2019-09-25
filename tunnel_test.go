@@ -1,6 +1,8 @@
 package tunnel_client
 
 import (
+	"github.com/go-yaml/yaml"
+	"github.com/iwind/TeaGo/logs"
 	"testing"
 )
 
@@ -40,4 +42,18 @@ func TestTunnel_StartRoot(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+}
+
+func TestTunnel_Config_Decode(t *testing.T) {
+	config := &Config{}
+	err := yaml.Unmarshal([]byte(`tunnels:
+  - remote: "8.8.8.8:9001"
+    root: "D:\\web"
+    index: [ "index.html" ]
+    host: ""
+    secret: ""`), config)
+	if err != nil {
+		t.Fatal(err)
+	}
+	logs.PrintAsJSON(config, t)
 }

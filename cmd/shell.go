@@ -32,8 +32,11 @@ func (this *Shell) Start() {
 	}
 
 	// write current pid
-	files.NewFile(Tea.Root + Tea.DS + "bin" + Tea.DS + "pid").
+	err := files.NewFile(Tea.Root + Tea.DS + "bin" + Tea.DS + "pid").
 		WriteString(fmt.Sprintf("%d", os.Getpid()))
+	if err != nil {
+		logs.Error(err)
+	}
 
 	// log
 	if len(os.Args) > 1 && !Tea.IsTesting() {
@@ -46,7 +49,7 @@ func (this *Shell) Start() {
 	}
 
 	// start tunnel manager
-	err := tunnelclient.SharedManager.Start()
+	err = tunnelclient.SharedManager.Start()
 	if err != nil {
 		logs.Println("[error]" + err.Error())
 	}
@@ -101,6 +104,8 @@ func (this *Shell) execArgs() bool {
 		return this.execRestart()
 	} else if lists.ContainsString(args, "status") {
 		return this.execStatus()
+	} else if lists.ContainsString(args, "background") {
+		return false
 	}
 
 	if len(args) > 0 {
@@ -167,7 +172,10 @@ func (this *Shell) execStop() bool {
 		return true
 	}
 
-	files.NewFile(Tea.Root + "/bin/pid").Delete()
+	err = files.NewFile(Tea.Root + "/bin/pid").Delete()
+	if err != nil {
+		logs.Error(err)
+	}
 	fmt.Println("TeaWeb Tunnel Client stopped ok, pid:", proc.Pid)
 
 	return true
@@ -182,9 +190,14 @@ func (this *Shell) execRestart() bool {
 			fmt.Println("TeaWeb Tunnel Client stop error:", err.Error())
 			return true
 		}
+		err = files.NewFile(Tea.Root + "/bin/pid").Delete()
+		if err != nil {
+			fmt.Println("pid file remove failed:", err.Error())
+			return true
+		}
 	}
 
-	cmd := exec.Command(os.Args[0])
+	cmd := exec.Command(os.Args[0], "background")
 	err := cmd.Start()
 	if err != nil {
 		fmt.Println("TeaWeb Tunnel Client restart failed:", err.Error())

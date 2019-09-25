@@ -1,0 +1,27 @@
+#! /bin/bash
+#
+# teaweb       TeaWeb tunnel management
+#
+# chkconfig: 2345 40 90
+# description: TeaWeb tunnel management
+
+# teaweb tunnel install dir
+INSTALL_DIR=/opt/teaweb/tunnel
+
+case "$1" in
+start)
+    ${INSTALL_DIR}/bin/teaweb-tunnel start
+    ;;
+stop)
+    ${INSTALL_DIR}/bin/teaweb-tunnel stop
+    ;;
+restart)
+    ${INSTALL_DIR}/bin/teaweb-tunnel restart
+    ;;
+status)
+    ${INSTALL_DIR}/bin/teaweb-tunnel status
+    ;;
+*)
+    echo $"Usage: $0 {start|stop|restart|status}"
+    exit 2
+esac
